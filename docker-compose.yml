@@ -1,0 +1,26 @@
+services:
+  backend:
+    image: yogananadan/user-management-backend:latest
+    container_name: user-management-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  frontend:
+    image: yogananadan/user-management-frontend:latest
+    container_name: user-management-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
