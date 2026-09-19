@@ -1,100 +1,114 @@
 # User Management System
 
-A full-stack application for managing user data with MongoDB, FastAPI backend, and HTML/CSS/JavaScript frontend.
+A web-based **User Management System** that allows users to register, log in, and manage user information. The application uses a **FastAPI backend**, **HTML/CSS/JavaScript frontend**, **Nginx**, and **MongoDB**.
 
-## Project Structure
+## How the Application Works
 
-```
-├── backend/
-│   ├── config/
-│   │   └── database.py       # MongoDB configuration
-│   ├── models/
-│   │   └── user.py           # User data models
-│   ├── routes/
-│   │   └── user_routes.py    # API endpoints
-│   ├── main.py               # FastAPI application entry point
-│   ├── requirements.txt      # Python dependencies
-│   └── .env                  # Environment variables
-├── frontend/
-│   ├── index.html            # Main HTML file
-│   ├── styles/
-│   │   └── style.css         # Styling
-│   └── js/
-│       ├── api.js            # API communication
-│       └── app.js            # Application logic
-└── README.md
+```text
+Browser
+   ↓
+Frontend (Nginx)
+   ↓ /api/
+Backend (FastAPI)
+   ↓
+MongoDB
 ```
 
-## Prerequisites
+* **Frontend:** Provides the user interface.
+* **Backend:** Handles user registration, login, and user management operations.
+* **MongoDB:** Stores user data.
+* **Nginx:** Serves the frontend and forwards API requests to the backend.
+* **Docker Compose:** Runs and connects the frontend and backend containers.
 
-- Python 3.8+
-- MongoDB (running locally on port 27017)
+---
 
-## Setup Instructions
+# How to Use
 
-### 1. Install MongoDB
+There are **two ways** to run this application.
 
-Make sure MongoDB is installed and running on your system.
+## Option 1 — Clone the GitHub Repository
 
-### 2. Backend Setup
+Clone the repository:
 
 ```bash
-# Navigate to backend directory
-cd backend
-
-# Create virtual environment (optional but recommended)
-python -m venv venv
-
-# Activate virtual environment
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the server
-python main.py
+git clone YOUR_GITHUB_REPOSITORY_URL
+cd YOUR_REPOSITORY_NAME
 ```
 
-The backend will run on `http://localhost:8000`
+Create:
 
-### 3. Frontend Setup
+```text
+backend/.env
+```
 
-Simply open `frontend/index.html` in a web browser, or use a local server:
+Add your MongoDB details:
+
+```env
+MONGODB_URL=your_mongodb_connection_string
+DATABASE_NAME=your_database_name
+```
+
+Then run:
 
 ```bash
-# Using Python
-cd frontend
-python -m http.server 8080
-
-# Or using Node.js http-server
-npx http-server -p 8080
+docker compose up
 ```
 
-Then open `http://localhost:8080` in your browser.
+Docker Compose builds/runs the application using the configuration in the repository.
 
-## API Endpoints
+Open:
 
-- `POST /api/users` - Create a new user
-- `GET /api/users` - Get all users
-- `GET /api/users/{user_id}` - Get a specific user
-- `DELETE /api/users/{user_id}` - Delete a user
-
-## Environment Variables
-
-Create a `.env` file in the backend directory with:
-
-```
-MONGODB_URL=mongodb://localhost:27017
-DATABASE_NAME=userdb
+```text
+http://localhost
 ```
 
-## Features
+---
 
-- Add new users with name, education, college, and location
-- View all registered users
-- Delete users
-- Responsive design
-- Real-time notifications
+## Option 2 — Use Docker Hub Images
+
+You can use the published Docker images **without downloading the application source code**.
+
+### Backend Image
+
+```text
+YOUR_DOCKERHUB_USERNAME/user-management-backend:latest
+```
+
+### Frontend Image
+
+```text
+YOUR_DOCKERHUB_USERNAME/user-management-frontend:latest
+```
+
+Create a `docker-compose.yml` using these images and create:
+
+```text
+backend/.env
+```
+
+with your own MongoDB configuration:
+
+```env
+MONGODB_URL=your_mongodb_connection_string
+DATABASE_NAME=your_database_name
+```
+
+Then simply run:
+
+```bash
+docker compose up
+```
+
+Docker Compose will automatically pull the images from Docker Hub, create the containers, connect them through a Docker network, and start the application.
+
+Open:
+
+```text
+http://localhost
+```
+
+### Important
+
+The Docker images **do not contain MongoDB credentials**. Each user must provide their own `MONGODB_URL` and `DATABASE_NAME` at runtime.
+
+You only need **Docker** to use the published images.
